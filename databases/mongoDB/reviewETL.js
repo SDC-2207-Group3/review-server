@@ -1,6 +1,3 @@
-// import csv from 'csv-parser';
-// import fs from 'fs';
-
 const csv = require('csv-parser');
 const fs = require('fs');
 const results = [];

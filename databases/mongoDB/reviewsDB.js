@@ -39,12 +39,29 @@ const ReviewMetaSchema = new Schema({
   },
   recommended: Boolean,
   characteristics: {
-    size:    { type: mongoose.Decimal128 },
-    fit:     { type: mongoose.Decimal128 },
-    comfort: { type: mongoose.Decimal128 },
-    length:  { type: mongoose.Decimal128 },
-    quality: { type: mongoose.Decimal128 },
-    width:   { type: mongoose.Decimal128 }
+    size: {
+      count: Number,
+      total: Number
+    },
+    fit: {
+      count: Number,
+      total: Number
+    },
+    comfort: {
+      count: Number,
+      total: Number },
+    length: {
+      count: Number,
+      total: Number
+    },
+    quality: {
+      count: Number,
+      total: Number
+    },
+    width: {
+      count: Number,
+      total: Number
+    }
   }
 })
 

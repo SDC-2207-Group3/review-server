@@ -1,0 +1,5 @@
+/client/dist/bundle.js
+node_modules
+.env
+FEC_BMW.pem
+oldData

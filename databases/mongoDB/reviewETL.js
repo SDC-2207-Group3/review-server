@@ -33,9 +33,8 @@ fs.createReadStream('/Users/thachdo/Documents/RFP2207/review-server/oldData/revi
         let data = Object.values(reviews);
 
         const insertManyAsync = async(data) => {
-          while (data.length > 0) {
-            let batch = data.splice(0, 100);
-            await insertMany(batch);
+          for (let i = 0; i < data.length; i++) {
+            await insertMany(data[i])
           }
         }
         insertManyAsync(data);

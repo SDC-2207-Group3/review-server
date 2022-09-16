@@ -40,10 +40,10 @@ let data3 = {
 let sampleData = [data1, data2, data3]
 
 const createAsync = async(data) => {
-  console.log(data);
-  await insertMany(data);
-  console.log('done')
-  await insertMany(data);
+  for (let i = 0; i < data.length; i++) {
+    await insertMany(data[i])
+    console.log('done with: ', i)
+  }
 }
 createAsync(sampleData);
 

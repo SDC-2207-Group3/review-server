@@ -6,11 +6,6 @@ import { create, insertMany, Review } from './reviewsDB.js'
 
 const reviews = {};
 
-// let createPromise = Promise.promisify(create);
-let createPromise = (data) => {
-  return new Promise(res => create(data))
-}
-
 // use promises to make sure all the data is here before we start putting them together?
 fs.createReadStream('/Users/thachdo/Documents/RFP2207/review-server/oldData/reviews.csv')
   .pipe(csv())
@@ -36,7 +31,14 @@ fs.createReadStream('/Users/thachdo/Documents/RFP2207/review-server/oldData/revi
         console.log('finished extracting reviews_photos.csv')
 
         let data = Object.values(reviews);
-        create(data)
+
+        const insertManyAsync = async(data) => {
+          while (data.length > 0) {
+            let batch = data.splice(0, 100);
+            await insertMany(batch);
+          }
+        }
+        insertManyAsync(data);
 
 
       })

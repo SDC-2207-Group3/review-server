@@ -37,8 +37,17 @@ let data3 = {
   helpfulness: 35,
   photos: [{url:'sdsavbdff.com'}, {url:'q3aszxcdg5.com'}]
 }
+let sampleData = [data1, data2, data3]
 
-create([data1, data2, data3])
+const createAsync = async(data) => {
+  console.log(data);
+  await insertMany(data);
+  console.log('done')
+  await insertMany(data);
+}
+createAsync(sampleData);
+
+// create([data1, data2, data3])
 // let createPromise = Promise.promisify(create);
 // createPromise(data1)
 //   .then((result) => {

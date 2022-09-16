@@ -9,6 +9,7 @@ const ReviewSchema = new Schema({
   product_id: Number,
   rating: Number,
   summary: String,
+  recommend: Boolean,
   response: String,
   body: String,
   date: Date,
@@ -32,28 +33,31 @@ const ReviewMetaSchema = new Schema({
     4: { type: Number },
     5: { type: Number }
   },
-  recommended: Boolean,
+  recommended: {
+    true: {type: Number},
+    false: {type: Number}
+  },
   characteristics: {
-    size: {
+    Size: {
       count: Number,
       total: Number
     },
-    fit: {
+    Fit: {
       count: Number,
       total: Number
     },
-    comfort: {
+    Comfort: {
       count: Number,
       total: Number },
-    length: {
+    Length: {
       count: Number,
       total: Number
     },
-    quality: {
+    Quality: {
       count: Number,
       total: Number
     },
-    width: {
+    Width: {
       count: Number,
       total: Number
     }
@@ -84,5 +88,39 @@ const create = (data) => {
   })
 }
 
-export { create, insertMany, Review };
+const loadReviewData = (data) => {
+  function cb(err, result) {
+    if (err) {
+      console.log(err)
+    } else {
+      if (data.length > 0) {
+        let batch = data.splice(0, 100);
+        Review.insertMany(batch, cb);
+      } else {
+        console.log('finished loading review data!')
+      }
+    }
+  }
+  let batch = data.splice(0, 100);
+  Review.insertMany(batch, cb);
+}
+
+const loadMetaData = (data) => {
+  function cb(err, result) {
+    if (err) {
+      console.log(err)
+    } else {
+      if (data.length > 0) {
+        let batch = data.splice(0, 100);
+        ReviewMeta.insertMany(batch, cb);
+      } else {
+        console.log('finished loading review meta data!')
+      }
+    }
+  }
+  let batch = data.splice(0, 100);
+  ReviewMeta.insertMany(batch, cb);
+}
+
+export { create, loadReviewData, loadMetaData, Review };
 

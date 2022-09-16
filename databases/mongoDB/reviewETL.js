@@ -2,56 +2,96 @@ import csv from 'csv-parser';
 import fs from 'fs';
 import Promise from 'bluebird';
 import neatCsv from 'neat-csv';
-import { Review } from './reviewsDB.js'
+import { loadReviewData, loadMetaData, Review } from './reviewsDB.js'
 
-const reviews = {};
+let reviews = {};
+let metaData = {};
+//temp object for characteristics_review csv to reference
+let characteristics = {};
 
-const loadReviewData = (data) => {
-  function cb(err, result) {
-    if (err) {
-      console.log(err)
-    } else {
-      if (data.length > 0) {
-        let batch = data.splice(0, 100);
-        Review.insertMany(batch, cb);
-      } else {
-        console.log('done inserting!')
-      }
-    }
-  }
-  let batch = data.splice(0, 100);
-  Review.insertMany(batch, cb);
-}
-
-// use promises to make sure all the data is here before we start putting them together?
-fs.createReadStream('/Users/thachdo/Documents/RFP2207/review-server/oldData/reviews.csv')
+fs.createReadStream('/Users/thachdo/Documents/RFP2207/review-server/oldData/characteristics.csv')
   .pipe(csv())
-  .on('data', (data) => reviews[data.id] = {
-    product_id: parseInt(data.product_id),
-    rating: parseInt(data.rating),
-    summary: data.summary,
-    recommend: Boolean(data.recommend),
-    response: data.response === 'null' ? null : data.response,
-    body: data.body,
-    date: Date(data.date),
-    reported: Boolean(data.reported),
-    reviewer_name: data.reviewer_name,
-    helpfulness: parseInt(data.helpfulness),
-    photos: []
+  .on('data', (data) => {
+    // will need to reference characteristics obj later
+    characteristics[data.id] = {
+      product_id: data.product_id,
+      name: data.name
+    }
+    // start shaping and populating metaData
+    metaData[data.product_id] = metaData[data.product_id] || {
+      product_id: data.product_id,
+      ratings: {
+        1: 0,
+        2: 0,
+        3: 0,
+        4: 0,
+        5: 0
+      },
+      recommended: {
+        true: 0,
+        false: 0
+      },
+      characteristics: {}
+    }
+    metaData[data.product_id]['characteristics'][data.name] = {count: 0, total: 0}
   })
   .on('end', () => {
-    console.log('finished extracting reviews.csv')
-    fs.createReadStream('/Users/thachdo/Documents/RFP2207/review-server/oldData/reviews_photos.csv')
-      .pipe(csv())
-      .on('data', (data) => reviews[data.review_id].photos.push({url: data.url}))
-      .on('end', () => {
-        console.log('finished extracting reviews_photos.csv')
+    console.log('finished extracting characteristics.csv')
+    fs.createReadStream('/Users/thachdo/Documents/RFP2207/review-server/oldData/characteristics.csv')
+    .pipe(csv())
+    .on('data', (data) => {
+      //this ignores missing data
+      if (characteristics[data.characteristic_id]) {
+        let product_id = characteristics[data.characteristic_id].product_id;
+        let name = characteristics[data.characteristic_id].name;
+        // agument metaData object
+        metaData[product_id]['characteristics'][name]['count'] += 1;
+        metaData[product_id]['characteristics'][name]['total'] += data.value;
+      }
+    })
+    .on('end', () => {
+      console.log('finished extracting characteristics_reviews.csv')
+      fs.createReadStream('/Users/thachdo/Documents/RFP2207/review-server/oldData/reviews.csv')
+        .pipe(csv())
+        .on('data', (data) => {
+          // populate reviews obj
+          reviews[data.id] = {
+            product_id: parseInt(data.product_id),
+            rating: parseInt(data.rating),
+            summary: data.summary,
+            recommend: Boolean(data.recommend),
+            response: data.response === 'null' ? null : data.response,
+            body: data.body,
+            date: Date(data.date),
+            reported: Boolean(data.reported),
+            reviewer_name: data.reviewer_name,
+            helpfulness: parseInt(data.helpfulness),
+            photos: []
+          }
+          //agument metadata object
+          metaData[data.product_id].ratings[parseInt(data.rating)] += 1;
+          metaData[data.product_id].recommended = metaData.recommended || {
+            false: 0,
+            true: 0
+          }
+          metaData[data.product_id].recommended[data.recommend] += 1;
+        })
+        .on('end', () => {
+          console.log('finished extracting reviews.csv')
+          fs.createReadStream('/Users/thachdo/Documents/RFP2207/review-server/oldData/reviews_photos.csv')
+            .pipe(csv())
+            .on('data', (data) => reviews[data.review_id].photos.push({url: data.url}))
+            .on('end', () => {
+              console.log('finished extracting reviews_photos.csv')
+              let reviewData = Object.values(reviews);
+              let metaDataValues = Object.values(metaData);
+              loadMetaData(metaDataValues);
 
-        let data = Object.values(reviews);
-        loadReviewData(data);
-
-      })
+            })
+        })
+    })
   })
+
 
 
 // example of inserting hard coded data

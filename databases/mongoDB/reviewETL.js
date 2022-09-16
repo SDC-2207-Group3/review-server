@@ -7,13 +7,13 @@ import { loadReviewData, loadMetaData, Review } from './reviewsDB.js'
 let reviews = {};
 let metaData = {};
 //temp object for characteristics_review csv to reference
-let characteristics = {};
+let chars = {};
 
 fs.createReadStream('/Users/thachdo/Documents/RFP2207/review-server/oldData/characteristics.csv')
   .pipe(csv())
   .on('data', (data) => {
     // will need to reference characteristics obj later
-    characteristics[data.id] = {
+    chars[data.id] = {
       product_id: data.product_id,
       name: data.name
     }
@@ -37,20 +37,20 @@ fs.createReadStream('/Users/thachdo/Documents/RFP2207/review-server/oldData/char
   })
   .on('end', () => {
     console.log('finished extracting characteristics.csv')
-    fs.createReadStream('/Users/thachdo/Documents/RFP2207/review-server/oldData/characteristics.csv')
+    fs.createReadStream('/Users/thachdo/Documents/RFP2207/review-server/oldData/characteristic_reviews.csv')
     .pipe(csv())
     .on('data', (data) => {
-      //this ignores missing data
-      if (characteristics[data.characteristic_id]) {
-        let product_id = characteristics[data.characteristic_id].product_id;
-        let name = characteristics[data.characteristic_id].name;
-        // agument metaData object
-        metaData[product_id]['characteristics'][name]['count'] += 1;
-        metaData[product_id]['characteristics'][name]['total'] += data.value;
-      }
+      let product_id = chars[data.characteristic_id].product_id;
+      let name = chars[data.characteristic_id].name;
+      // agument metaData object
+      metaData[product_id]['characteristics'][name]['count'] += 1;
+      metaData[product_id]['characteristics'][name]['total'] += parseInt(data.value);
+
     })
     .on('end', () => {
       console.log('finished extracting characteristics_reviews.csv')
+      // let metaDataValues = Object.values(metaData);
+      // console.log(metaDataValues.slice(0, 20));
       fs.createReadStream('/Users/thachdo/Documents/RFP2207/review-server/oldData/reviews.csv')
         .pipe(csv())
         .on('data', (data) => {
@@ -86,7 +86,7 @@ fs.createReadStream('/Users/thachdo/Documents/RFP2207/review-server/oldData/char
               let reviewData = Object.values(reviews);
               let metaDataValues = Object.values(metaData);
               loadMetaData(metaDataValues);
-
+              loadReviewData(reviewData);
             })
         })
     })

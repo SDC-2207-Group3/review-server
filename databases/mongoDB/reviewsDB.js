@@ -38,26 +38,26 @@ const ReviewMetaSchema = new Schema({
     false: {type: Number}
   },
   characteristics: {
-    size: {
+    Size: {
       count: Number,
       total: Number
     },
-    fit: {
+    Fit: {
       count: Number,
       total: Number
     },
-    comfort: {
+    Comfort: {
       count: Number,
       total: Number },
-    length: {
+    Length: {
       count: Number,
       total: Number
     },
-    quality: {
+    Quality: {
       count: Number,
       total: Number
     },
-    width: {
+    Width: {
       count: Number,
       total: Number
     }

@@ -91,18 +91,3 @@ fs.createReadStream('/Users/thachdo/Documents/RFP2207/review-server/oldData/char
         })
     })
   })
-
-
-
-// example of inserting hard coded data
-// create({
-//   product_id: 5,
-//   rating: 3,
-//   summary: "Buy this",
-//   response: "I like it, I buy it",
-//   date: 'Thu Sep 15 2022 11:37:40 GMT-0700 (Pacific Daylight Time)',
-//   reported: false,
-//   reviewer_name: 'takattack',
-//   helpfulness: 25,
-//   photos: [{url: 'sdf.com'}, {url: 'q35.com'}]
-// })

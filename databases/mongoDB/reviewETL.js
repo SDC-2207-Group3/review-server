@@ -2,9 +2,26 @@ import csv from 'csv-parser';
 import fs from 'fs';
 import Promise from 'bluebird';
 import neatCsv from 'neat-csv';
-import { create, insertMany, Review } from './reviewsDB.js'
+import { Review } from './reviewsDB.js'
 
 const reviews = {};
+
+const loadReviewData = (data) => {
+  function cb(err, result) {
+    if (err) {
+      console.log(err)
+    } else {
+      if (data.length > 0) {
+        let batch = data.splice(0, 100);
+        Review.insertMany(batch, cb);
+      } else {
+        console.log('done inserting!')
+      }
+    }
+  }
+  let batch = data.splice(0, 100);
+  Review.insertMany(batch, cb);
+}
 
 // use promises to make sure all the data is here before we start putting them together?
 fs.createReadStream('/Users/thachdo/Documents/RFP2207/review-server/oldData/reviews.csv')
@@ -31,45 +48,10 @@ fs.createReadStream('/Users/thachdo/Documents/RFP2207/review-server/oldData/revi
         console.log('finished extracting reviews_photos.csv')
 
         let data = Object.values(reviews);
-
-        const insertManyAsync = async(data) => {
-          for (let i = 0; i < data.length; i++) {
-            await insertMany(data[i])
-          }
-        }
-        insertManyAsync(data);
-
+        loadReviewData(data);
 
       })
   })
-
-
-
-        // const processData = async(reviews) => {
-        //   for (let review in reviews) {
-        //     let result = await createPromise(reviews[review]);
-        //     console.log(result);
-        //     console.log('done processing review:', review)
-        //   }
-        // }
-
-        // processData(reviews);
-
-
-        // const processData = async(reviews) => {
-        //   let toInsert = [];
-        //   for (let review in reviews) {
-        //     toInsert.push(reviews[review]);
-        //     if(toInsert.length >= 100) {
-        //       await bulkPromise(toInsert);
-        //       toInsert = [];
-        //     }
-        //   }
-        // }
-        // processData(reviews);
-        // asyncInsert(0, transformedData);
-        // insertMany(transformedData.slice(0, 10));
-        // insertMany(Object.values(reviews));
 
 
 // example of inserting hard coded data

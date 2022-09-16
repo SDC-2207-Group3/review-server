@@ -76,34 +76,8 @@ const User = mongoose.model('User', UserSchema);
 
 //define CRUD operations for this class
 
-// const create = (data) => {
-//   Review.create(data, (err, result) => {
-//     if (err) {
-//       console.log(err);
-//     } else {
-//       return result;
-//     }
-//   })
-// }
-
-// idea to next the subsequent calls in the callback
 const create = (data) => {
-  let index = 0;
-  function cb(err, result) {
-    if (err) {
-      console.log(err)
-    } else {
-      index += 1;
-      if (index < data.length) {
-        Review.create(data[index], cb)
-      }
-    }
-  }
-  Review.create(data[index], cb)
-}
-
-const insertMany = (data) => {
-  Review.insertMany(data, (err, result) => {
+  Review.create(data, (err, result) => {
     if (err) {
       console.log(err);
     }
@@ -111,6 +85,4 @@ const insertMany = (data) => {
 }
 
 export { create, insertMany, Review };
-
-
 

@@ -11,8 +11,8 @@ app.use(express.json())
 app.use(logger)
 
 // middlewares
-app.use(bodyParser.json());
-// app.use(morgan('combined'));
+// app.use(bodyParser.json());
+app.use(morgan('dev'));
 
 // routes
 app.get('/reviews', getReviews)

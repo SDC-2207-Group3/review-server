@@ -1,8 +1,27 @@
 import { Review, ReviewMeta } from '../databases/mongoDB/reviewsDB.js';
 
-const retrieve = async(product_id, page, count, cb) => {
+const retrieveReviews = async(product_id, page, count, cb) => {
+  Review.find({"product_id": product_id}, cb).limit(count)
+}
 
-// // working example using aggregation
+const retrieveReviewsMeta = async(product_id, cb) => {
+  ReviewMeta.find({"product_id": product_id}, cb);
+}
+
+const modelPost = async() => {
+
+}
+
+export { retrieveReviews, retrieveReviewsMeta, modelPost }
+
+
+
+
+// ========================= REVIEW =========================
+  // change photos _id to id (didn't work as a subdocument)
+  // handle page count? see what the client is expecting
+
+  // // working example using aggregation
 // let result = await Review.aggregate([
 //   {"$match": {product_id: product_id}},
 //   {"$addFields": {
@@ -26,15 +45,10 @@ const retrieve = async(product_id, page, count, cb) => {
 // // console.log('got result', result)
 // cb(null, result);
 // }
-Review.find({"product_id": product_id}, cb).limit(count)
-}
-
-export { retrieve }
 
 
-
-
-  // need to transform the data coming back
-  // change photos _id to id
-  // handle page count? see what the client is expecting
-  //data was inserted wrong, all reviews are reported as true
+//  ========================= REVIEW META NEED FIXES =========================
+// potential: does each characteristic need their id?
+// value needs to be computed from total and count
+// method 1: calculate that while processing a get request
+// method 2: find and update an average during a post request

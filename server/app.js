@@ -2,7 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import logger from './middleware/logger.js';
-import { getReviews } from './controllers.js';
+import { getReviews, getReviewsMeta, postReview } from './controllers.js';
 
 const app = express();
 const port = 3000; //add to .env later
@@ -16,6 +16,8 @@ app.use(morgan('dev'));
 
 // routes
 app.get('/reviews', getReviews)
+app.get('/reviews/meta', getReviewsMeta)
+app.post('/reviews', postReview)
 
 
 

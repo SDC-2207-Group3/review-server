@@ -1,8 +1,8 @@
-import { retrieve } from './models.js'
+import { retrieveReviews, retrieveReviewsMeta, modelPost } from './models.js'
 
 const getReviews = (req, res) => {
   let { product_id, page, count} = req.headers;
-  retrieve(parseInt(product_id), parseInt(page), parseInt(count), (err, result) => {
+  retrieveReviews(parseInt(product_id), parseInt(page), parseInt(count), (err, result) => {
     if (err) {
       res.send(err);
     } else {
@@ -15,8 +15,23 @@ const getReviews = (req, res) => {
       res.send(data);
     }
   })
+}
+
+const getReviewsMeta = (req, res) => {
+  let { product_id } = req.headers;
+  retrieveReviewsMeta(parseInt(product_id), (err, result) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send(result);
+    }
+  })
+
+}
+
+const postReview = (req, res) => {
 
 }
 
 
-export { getReviews }
+export { getReviews, getReviewsMeta, postReview }

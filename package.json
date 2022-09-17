@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server-dev": "node server/app.js",
+    "server-dev": "nodemon server/app.js",
     "mongo": "node databases/mongoDB/reviewsDB.js",
     "mongo-etl": "node --max-old-space-size=8192 databases/mongoDB/reviewETL.js",
     "sandbox": "node sandbox.js",
@@ -32,5 +32,8 @@
     "morgan": "^1.10.0",
     "neat-csv": "^7.0.0"
   },
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
 }

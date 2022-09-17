@@ -122,5 +122,5 @@ const loadMetaData = (data) => {
   ReviewMeta.insertMany(batch, cb);
 }
 
-export { create, loadReviewData, loadMetaData, Review };
+export { create, loadReviewData, loadMetaData, Review, ReviewMeta };
 

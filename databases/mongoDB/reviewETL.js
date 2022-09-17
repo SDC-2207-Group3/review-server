@@ -59,11 +59,11 @@ fs.createReadStream('/Users/thachdo/Documents/RFP2207/review-server/oldData/char
             product_id: parseInt(data.product_id),
             rating: parseInt(data.rating),
             summary: data.summary,
-            recommend: Boolean(data.recommend),
+            recommend: data.recommend === 'true' ? true : false,
             response: data.response === 'null' ? null : data.response,
             body: data.body,
             date: Date(data.date),
-            reported: Boolean(data.reported),
+            reported: data.reported === 'true' ? true : false,
             reviewer_name: data.reviewer_name,
             helpfulness: parseInt(data.helpfulness),
             photos: []

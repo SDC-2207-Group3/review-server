@@ -3,9 +3,21 @@ const { Schema } = mongoose;
 
 mongoose.connect('mongodb://localhost/reviews')
 
-const PhotoSchema = new Schema({url: String});
+const PhotoSchema = new Schema({
+  id: {
+    type: Number,
+    unique: true
+  }
+  url: String,
+});
 
 const ReviewSchema = new Schema({
+  // add id
+  // add review_id (make this the default, index)
+  review_id: {
+    type: Number,
+    unique: true
+  }
   product_id: Number,
   rating: Number,
   summary: String,

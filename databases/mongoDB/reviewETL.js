@@ -4,12 +4,14 @@ import Promise from 'bluebird';
 import neatCsv from 'neat-csv';
 import { loadReviewData, loadMetaData, Review } from './reviewsDB.js'
 
+// let datafolder = 'oldData';
+let datafolder = 'sampleData';
 let reviews = {};
 let metaData = {};
 //temp object for characteristics_review csv to reference
 let chars = {};
 
-fs.createReadStream('/Users/thachdo/Documents/RFP2207/review-server/oldData/characteristics.csv')
+fs.createReadStream(`/Users/thachdo/Documents/RFP2207/review-server/${datafolder}/characteristics.csv`)
   .pipe(csv())
   .on('data', (data) => {
     // will need to reference characteristics obj later
@@ -37,7 +39,7 @@ fs.createReadStream('/Users/thachdo/Documents/RFP2207/review-server/oldData/char
   })
   .on('end', () => {
     console.log('finished extracting characteristics.csv')
-    fs.createReadStream('/Users/thachdo/Documents/RFP2207/review-server/oldData/characteristic_reviews.csv')
+    fs.createReadStream(`/Users/thachdo/Documents/RFP2207/review-server/${datafolder}/characteristic_reviews.csv`)
     .pipe(csv())
     .on('data', (data) => {
       let product_id = chars[data.characteristic_id].product_id;
@@ -51,11 +53,13 @@ fs.createReadStream('/Users/thachdo/Documents/RFP2207/review-server/oldData/char
       console.log('finished extracting characteristics_reviews.csv')
       // let metaDataValues = Object.values(metaData);
       // console.log(metaDataValues.slice(0, 20));
-      fs.createReadStream('/Users/thachdo/Documents/RFP2207/review-server/oldData/reviews.csv')
+      fs.createReadStream(`/Users/thachdo/Documents/RFP2207/review-server/${datafolder}/reviews.csv`)
         .pipe(csv())
         .on('data', (data) => {
           // populate reviews obj
           reviews[data.id] = {
+            // delete previous review_id to use Objectid
+            // review_id: parseInt(data.id),
             product_id: parseInt(data.product_id),
             rating: parseInt(data.rating),
             summary: data.summary,
@@ -78,13 +82,18 @@ fs.createReadStream('/Users/thachdo/Documents/RFP2207/review-server/oldData/char
         })
         .on('end', () => {
           console.log('finished extracting reviews.csv')
-          fs.createReadStream('/Users/thachdo/Documents/RFP2207/review-server/oldData/reviews_photos.csv')
+          fs.createReadStream(`/Users/thachdo/Documents/RFP2207/review-server/${datafolder}/reviews_photos.csv`)
             .pipe(csv())
-            .on('data', (data) => reviews[data.review_id].photos.push({url: data.url}))
+            .on('data', (data) => reviews[data.review_id].photos.push({
+              url: data.url,
+              id: parseInt(data.id)
+            }))
             .on('end', () => {
               console.log('finished extracting reviews_photos.csv')
               let reviewData = Object.values(reviews);
               let metaDataValues = Object.values(metaData);
+              // console.log(reviewData);
+              // console.log(metaDataValues);
               loadMetaData(metaDataValues);
               loadReviewData(reviewData);
             })

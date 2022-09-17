@@ -3,7 +3,16 @@ const { Schema } = mongoose;
 
 mongoose.connect('mongodb://localhost/reviews')
 
-const PhotoSchema = new Schema({url: String});
+const PhotoSchema = new Schema({
+  url: String
+});
+
+PhotoSchema.method('toJSON', function () {
+  const { __v, _id, ...object } = this.toObject();
+  // this doesn't work because it's a subdocument
+  object.id = _id;
+  return object;
+});
 
 const ReviewSchema = new Schema({
   product_id: Number,
@@ -20,6 +29,13 @@ const ReviewSchema = new Schema({
     type: [PhotoSchema]
   }
 })
+
+ReviewSchema.method('toJSON', function () {
+  const { __v, _id, ...object } = this.toObject();
+  object.review_id = _id;
+  delete object.product_id;
+  return object;
+});
 
 const ReviewMetaSchema = new Schema({
   product_id: {
@@ -64,22 +80,17 @@ const ReviewMetaSchema = new Schema({
   }
 })
 
-const UserSchema = new Schema({
-  user_id: {
-    type: Number,
-    unique: true
-  },
-  email: String,
-  name: String,
-})
+ReviewMetaSchema.method('toJSON', function () {
+  const { __v, _id, ...object } = this.toObject();
+  object.id = _id;
+  return object;
+});
 
 //declare class of reviews using schema
 const Review = mongoose.model('Review', ReviewSchema);
 const ReviewMeta = mongoose.model('ReviewMeta', ReviewMetaSchema);
-const User = mongoose.model('User', UserSchema);
 
 //define CRUD operations for this class
-
 const create = (data) => {
   Review.create(data, (err, result) => {
     if (err) {
@@ -122,5 +133,5 @@ const loadMetaData = (data) => {
   ReviewMeta.insertMany(batch, cb);
 }
 
-export { create, loadReviewData, loadMetaData, Review };
+export { create, loadReviewData, loadMetaData, Review, ReviewMeta };
 

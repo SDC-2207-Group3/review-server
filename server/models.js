@@ -74,16 +74,6 @@ export { modelGetReviews, modelGetMeta, modelPost, modelMarkHelpful, modelReport
   // handle page count? see what the client is expecting
   // Need to handle sortBy
 
-//  ========================= REVIEW META NEED FIXES =========================
-// potential: does each characteristic need their id?
-// value needs to be computed from total and count
-// method 1: calculate that while processing a get request
-// method 2: find and update an average during a post request
-
-
-//  ========================= POST REVIEW =========================
-// incoming data uses the characteristic id
-
 // ========================= PUT /reviews/:review_id/helpful =========================
 // passes in review_id
 

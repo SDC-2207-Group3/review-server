@@ -50,14 +50,21 @@ const modelPost = async(data, cb) => {
     console.log('got here and updated metadata')
     await result.save();
     cb(null, true);
-  } catch (error) {
+  } catch(error) {
     cb(error, null)
   }
 
 }
 
-const modelMarkHelpful = async() => {
-
+const modelMarkHelpful = async(review_id, cb) => {
+  try {
+    const review = await Review.findById(review_id);
+    review.helpfulness += 1;
+    await review.save();
+    cb(null, true)
+  } catch(error) {
+    cb(error, null)
+  }
 }
 
 const modelReportReview = async() => {

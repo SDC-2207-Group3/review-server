@@ -46,7 +46,13 @@ const postReview = (req, res) => {
 }
 
 const markHelpful = (req, res) => {
-
+  modelMarkHelpful(req.params.review_id, (err, result) => {
+    if (err) {
+      res.sendStatus(404);
+    } else {
+      res.sendStatus(204)
+    }
+  });
 }
 
 const reportReview = (req, res) => {

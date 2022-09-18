@@ -16,7 +16,7 @@ const modelGetMeta = async(product_id, cb) => {
         value: element.total / element.count
       }
     }
-    // result keeps changing back, probably some default methods, declaring data and returning that instead
+    // RESULT keeps changing back, probably some default methods, declaring DATA and returning that instead
     let data = {
       product_id: result.product_id,
       ratings: result.ratings,
@@ -50,14 +50,21 @@ const modelPost = async(data, cb) => {
     console.log('got here and updated metadata')
     await result.save();
     cb(null, true);
-  } catch (error) {
+  } catch(error) {
     cb(error, null)
   }
 
 }
 
-const modelMarkHelpful = async() => {
-
+const modelMarkHelpful = async(review_id, cb) => {
+  try {
+    const review = await Review.findById(review_id);
+    review.helpfulness += 1;
+    await review.save();
+    cb(null, true)
+  } catch(error) {
+    cb(error, null)
+  }
 }
 
 const modelReportReview = async() => {
@@ -73,42 +80,6 @@ export { modelGetReviews, modelGetMeta, modelPost, modelMarkHelpful, modelReport
   // change photos _id to id (didn't work as a subdocument)
   // handle page count? see what the client is expecting
   // Need to handle sortBy
-
-  // // working example using aggregation
-// let result = await Review.aggregate([
-//   {"$match": {product_id: product_id}},
-//   {"$addFields": {
-//     "review_id": "$_id",
-//     // "photos": {`
-//     //   // need to specific path to that element, not all _id
-//     //   "id": "$photos._id",
-//     // }
-//   }},
-//   {"$limit": count},
-//   {"$project": {
-//     "_id": 0,
-//     "__v": 0,
-//     "product_id": 0,
-//     // photos: {
-//     //   _id: 0
-//     // }
-//   }},
-
-// ])
-// // console.log('got result', result)
-// cb(null, result);
-// }
-
-
-//  ========================= REVIEW META NEED FIXES =========================
-// potential: does each characteristic need their id?
-// value needs to be computed from total and count
-// method 1: calculate that while processing a get request
-// method 2: find and update an average during a post request
-
-
-//  ========================= POST REVIEW =========================
-// incoming data uses the characteristic id
 
 // ========================= PUT /reviews/:review_id/helpful =========================
 // passes in review_id

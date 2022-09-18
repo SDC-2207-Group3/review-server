@@ -6,7 +6,7 @@ mongoose.connect('mongodb://localhost/reviews')
 const PhotoSchema = new Schema({
   url: String
 });
-
+// didn't work, might crash client with _id instead of id
 // PhotoSchema.method('toJSON', function () {
 //   const { __v, _id, ...object } = this.toObject();
 //   // this doesn't work because it's a subdocument
@@ -65,12 +65,6 @@ const ReviewMetaSchema = new Schema({
     name: String
   })]
 })
-
-// ReviewMetaSchema.method('toJSON', function () {
-//   const { __v, _id, ...object } = this.toObject();
-//   object.id = _id;
-//   return object;
-// });
 
 //declare class of reviews using schema
 const Review = mongoose.model('Review', ReviewSchema);

@@ -16,7 +16,7 @@ const modelGetMeta = async(product_id, cb) => {
         value: element.total / element.count
       }
     }
-    // result keeps changing back, probably some default methods, declaring data and returning that instead
+    // RESULT keeps changing back, probably some default methods, declaring DATA and returning that instead
     let data = {
       product_id: result.product_id,
       ratings: result.ratings,
@@ -73,32 +73,6 @@ export { modelGetReviews, modelGetMeta, modelPost, modelMarkHelpful, modelReport
   // change photos _id to id (didn't work as a subdocument)
   // handle page count? see what the client is expecting
   // Need to handle sortBy
-
-  // // working example using aggregation
-// let result = await Review.aggregate([
-//   {"$match": {product_id: product_id}},
-//   {"$addFields": {
-//     "review_id": "$_id",
-//     // "photos": {`
-//     //   // need to specific path to that element, not all _id
-//     //   "id": "$photos._id",
-//     // }
-//   }},
-//   {"$limit": count},
-//   {"$project": {
-//     "_id": 0,
-//     "__v": 0,
-//     "product_id": 0,
-//     // photos: {
-//     //   _id: 0
-//     // }
-//   }},
-
-// ])
-// // console.log('got result', result)
-// cb(null, result);
-// }
-
 
 //  ========================= REVIEW META NEED FIXES =========================
 // potential: does each characteristic need their id?

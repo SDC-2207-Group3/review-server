@@ -1,4 +1,5 @@
 import { Review, ReviewMeta } from '../databases/mongoDB/reviewsDB.js';
+import mongoose from 'mongoose';
 
 const modelGetReviews = async(product_id, page, count, cb) => {
   Review.find({"product_id": product_id}, cb).
@@ -6,11 +7,38 @@ const modelGetReviews = async(product_id, page, count, cb) => {
 }
 
 const modelGetMeta = async(product_id, cb) => {
+  // need to intercept and compute average
   ReviewMeta.find({"product_id": product_id}, cb);
 }
 
 const modelPost = async(data, cb) => {
-  Review.create(data, cb);
+// wait for all async functions to finish
+// ideally, all async functions should be fire simultaneously
+  // Review.create(data, cb);
+  // for (let id in data.characteristics) {
+  //   console.log('updating char id', id);
+  //   id = mongoose.Types.ObjectId(id);
+  //   console.log(id instanceof mongoose.Types.ObjectId);
+  //   ReviewMeta.findByIdAndUpdate(id, {
+  //     count: 10,
+  //     total: 10
+  //   })
+  // }
+  // cb(null, 'done');
+  // ReviewMeta.findById(mongoose.Types.ObjectId(data.id), (err, result) => {
+  //   if (err) {
+  //     cb(err, null);
+  //   } else {
+  //     result.characteristics
+  //     result.save();
+  //     cb(null, result);
+  //   }
+  // })
+  const result = await Review.findById('632745a4f046a75ee4df8b72')
+  console.log(result);
+  const photo = result.photos.id('632745a4f046a75ee4df8b73')
+  console.log('photo', photo)
+  cb(null, 'hi')
 }
 
 const modelMarkHelpful = async() => {

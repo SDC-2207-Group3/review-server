@@ -59,32 +59,11 @@ const ReviewMetaSchema = new Schema({
     true: {type: Number},
     false: {type: Number}
   },
-  characteristics: {
-    Size: new Schema ({
-      count: Number,
-      total: Number
-    }),
-    Fit: new Schema ({
-      count: Number,
-      total: Number
-    }),
-    Comfort: new Schema ({
-      count: Number,
-      total: Number
-    }),
-    Length: new Schema ({
-      count: Number,
-      total: Number
-    }),
-    Quality: new Schema ({
-      count: Number,
-      total: Number
-    }),
-    Width: new Schema ({
-      count: Number,
-      total: Number
-    })
-  }
+  characteristics: [new Schema({
+    count: Number,
+    total: Number,
+    name: String
+  })]
 })
 
 ReviewMetaSchema.method('toJSON', function () {

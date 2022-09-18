@@ -1,8 +1,8 @@
-import { retrieveReviews, retrieveReviewsMeta, modelPost } from './models.js'
+import { modelGetReviews, modelGetMeta, modelPost, modelMarkHelpful, modelReportReview } from './models.js'
 
 const getReviews = (req, res) => {
   let { product_id, page, count} = req.headers;
-  retrieveReviews(parseInt(product_id), parseInt(page), parseInt(count), (err, result) => {
+  modelGetReviews(parseInt(product_id), parseInt(page), parseInt(count), (err, result) => {
     if (err) {
       res.send(err);
     } else {
@@ -19,7 +19,7 @@ const getReviews = (req, res) => {
 
 const getReviewsMeta = (req, res) => {
   let { product_id } = req.headers;
-  retrieveReviewsMeta(parseInt(product_id), (err, result) => {
+  modelGetMeta(parseInt(product_id), (err, result) => {
     if (err) {
       res.send(err);
     } else {
@@ -30,8 +30,27 @@ const getReviewsMeta = (req, res) => {
 }
 
 const postReview = (req, res) => {
+  let data = req.body;
+  let formmattedPhotos = [];
+  for (let url of data.photos) {
+    formmattedPhotos.push({url: url})
+  }
+  data.photos = formmattedPhotos;
+  modelPost(data, (err, result) => {
+    if (err) {
+      res.sendStatus(400);
+    } else {
+      res.sendStatus(201)
+    }
+  })
+}
+
+const markHelpful = (req, res) => {
 
 }
 
+const reportReview = (req, res) => {
 
-export { getReviews, getReviewsMeta, postReview }
+}
+
+export { getReviews, getReviewsMeta, postReview, markHelpful, reportReview }

@@ -86,7 +86,7 @@ fs.createReadStream(`/Users/thachdo/Documents/RFP2207/review-server/${datafolder
             .pipe(csv())
             .on('data', (data) => reviews[data.review_id].photos.push({
               url: data.url,
-              id: parseInt(data.id)
+              // id: parseInt(data.id)
             }))
             .on('end', () => {
               console.log('finished extracting reviews_photos.csv')

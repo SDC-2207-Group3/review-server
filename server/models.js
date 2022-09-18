@@ -1,18 +1,27 @@
 import { Review, ReviewMeta } from '../databases/mongoDB/reviewsDB.js';
 
-const retrieveReviews = async(product_id, page, count, cb) => {
-  Review.find({"product_id": product_id}, cb).limit(count)
+const modelGetReviews = async(product_id, page, count, cb) => {
+  Review.find({"product_id": product_id}, cb).
+  limit(count)
 }
 
-const retrieveReviewsMeta = async(product_id, cb) => {
+const modelGetMeta = async(product_id, cb) => {
   ReviewMeta.find({"product_id": product_id}, cb);
 }
 
-const modelPost = async() => {
+const modelPost = async(data, cb) => {
+  Review.create(data, cb);
+}
+
+const modelMarkHelpful = async() => {
 
 }
 
-export { retrieveReviews, retrieveReviewsMeta, modelPost }
+const modelReportReview = async() => {
+
+}
+
+export { modelGetReviews, modelGetMeta, modelPost, modelMarkHelpful, modelReportReview }
 
 
 
@@ -20,6 +29,7 @@ export { retrieveReviews, retrieveReviewsMeta, modelPost }
 // ========================= REVIEW =========================
   // change photos _id to id (didn't work as a subdocument)
   // handle page count? see what the client is expecting
+  // Need to handle sortBy
 
   // // working example using aggregation
 // let result = await Review.aggregate([
@@ -52,3 +62,12 @@ export { retrieveReviews, retrieveReviewsMeta, modelPost }
 // value needs to be computed from total and count
 // method 1: calculate that while processing a get request
 // method 2: find and update an average during a post request
+
+
+//  ========================= POST REVIEW =========================
+// incoming data uses the characteristic id
+
+// ========================= PUT /reviews/:review_id/helpful =========================
+// passes in review_id
+
+// ========================= PUT /reviews/:review_id/report =========================

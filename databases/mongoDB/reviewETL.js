@@ -33,21 +33,28 @@ fs.createReadStream(`/Users/thachdo/Documents/RFP2207/review-server/${datafolder
         true: 0,
         false: 0
       },
-      characteristics: {}
+      characteristics: []
     }
-    metaData[data.product_id]['characteristics'][data.name] = {count: 0, total: 0}
+    metaData[data.product_id]['characteristics'].push({name: data.name, count: 0, total: 0});
   })
   .on('end', () => {
     console.log('finished extracting characteristics.csv')
+    // console.log('review', reviews);
+    // console.log('metaData', metaData['1'].characteristics);
+    // console.log('chars', chars);
     fs.createReadStream(`/Users/thachdo/Documents/RFP2207/review-server/${datafolder}/characteristic_reviews.csv`)
     .pipe(csv())
     .on('data', (data) => {
       let product_id = chars[data.characteristic_id].product_id;
       let name = chars[data.characteristic_id].name;
       // agument metaData object
-      metaData[product_id]['characteristics'][name]['count'] += 1;
-      metaData[product_id]['characteristics'][name]['total'] += parseInt(data.value);
-
+      let charsList = metaData[product_id]['characteristics'];
+      for (let char of charsList) {
+        if (char.name === name) {
+          char.count += 1;
+          char.total += parseInt(data.value);
+        }
+      }
     })
     .on('end', () => {
       console.log('finished extracting characteristics_reviews.csv')
@@ -86,14 +93,14 @@ fs.createReadStream(`/Users/thachdo/Documents/RFP2207/review-server/${datafolder
             .pipe(csv())
             .on('data', (data) => reviews[data.review_id].photos.push({
               url: data.url,
-              id: parseInt(data.id)
+              // id: parseInt(data.id)
             }))
             .on('end', () => {
               console.log('finished extracting reviews_photos.csv')
               let reviewData = Object.values(reviews);
               let metaDataValues = Object.values(metaData);
-              // console.log(reviewData);
-              // console.log(metaDataValues);
+              // console.log(reviewData[0]);
+              // console.log(metaDataValues[0]);
               loadMetaData(metaDataValues);
               loadReviewData(reviewData);
             })

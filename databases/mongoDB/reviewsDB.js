@@ -7,12 +7,12 @@ const PhotoSchema = new Schema({
   url: String
 });
 
-PhotoSchema.method('toJSON', function () {
-  const { __v, _id, ...object } = this.toObject();
-  // this doesn't work because it's a subdocument
-  object.id = _id;
-  return object;
-});
+// PhotoSchema.method('toJSON', function () {
+//   const { __v, _id, ...object } = this.toObject();
+//   // this doesn't work because it's a subdocument
+//   object.id = _id;
+//   return object;
+// });
 
 const ReviewSchema = new Schema({
   product_id: Number,
@@ -22,9 +22,15 @@ const ReviewSchema = new Schema({
   response: String,
   body: String,
   date: Date,
-  reported: Boolean,
+  reported: {
+    type: Boolean,
+    default: false
+  },
   reviewer_name: String,
-  helpfulness: Number,
+  helpfulness: {
+    type: Number,
+    default: 0
+  },
   photos: {
     type: [PhotoSchema]
   }
@@ -53,31 +59,11 @@ const ReviewMetaSchema = new Schema({
     true: {type: Number},
     false: {type: Number}
   },
-  characteristics: {
-    Size: {
-      count: Number,
-      total: Number
-    },
-    Fit: {
-      count: Number,
-      total: Number
-    },
-    Comfort: {
-      count: Number,
-      total: Number },
-    Length: {
-      count: Number,
-      total: Number
-    },
-    Quality: {
-      count: Number,
-      total: Number
-    },
-    Width: {
-      count: Number,
-      total: Number
-    }
-  }
+  characteristics: [new Schema({
+    count: Number,
+    total: Number,
+    name: String
+  })]
 })
 
 ReviewMetaSchema.method('toJSON', function () {

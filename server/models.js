@@ -14,35 +14,28 @@ const modelGetMeta = async(product_id, cb) => {
 
 const modelPost = async(data, cb) => {
 // wait for all async functions to finish
-// ideally, all async functions should be fire simultaneously
-  // Review.create(data, cb);
-  // for (let id in data.characteristics) {
-  //   console.log('updating char id', id);
-  //   id = mongoose.Types.ObjectId(id);
-  //   console.log(id instanceof mongoose.Types.ObjectId);
-  //   ReviewMeta.findByIdAndUpdate(id, {
-  //     count: 10,
-  //     total: 10
-  //   })
-  // }
-  // cb(null, 'done');
-
-  const result = await ReviewMeta.findOne({product_id: data.product_id});
-  for (let chars in data.characteristics) {
-    console.log('type of ', typeof chars, chars)
-    result.characteristics.id(chars).count += 1;
-    result.characteristics.id(chars).total += data.characteristics[chars];
+// ideally, all async functions should be fire simultaneously, but how
+// but at the same time, we want to make sure that the review CAN be successfully created before updating the metadata, but the client should already have that kind of validation.
+  try {
+    await Review.create(data);
+    console.log('got here')
+    const result = await ReviewMeta.findOne({product_id: data.product_id});
+    for (let chars in data.characteristics) {
+      result.characteristics.id(chars).count += 1;
+      result.characteristics.id(chars).total += data.characteristics[chars];
+    }
+    if (data.recommend) {
+      result.recommended.true += 1;
+    } else {
+      result.recommended.false += 1;
+    }
+    result.ratings[data.rating] += 1;
+    console.log('got here and updated metadata')
+    await result.save();
+    cb(null, true);
+  } catch (error) {
+    cb(error, null)
   }
-  if (data.recommend) {
-    result.recommended.true += 1;
-  } else {
-    result.recommended.false += 1;
-  }
-  result.ratings[data.rating] += 1;
-  await result.save();
-
-  cb(null, 'hi')
-
 
 }
 

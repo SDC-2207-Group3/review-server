@@ -33,6 +33,12 @@ const modelPost = async(data, cb) => {
     result.characteristics.id(chars).count += 1;
     result.characteristics.id(chars).total += data.characteristics[chars];
   }
+  if (data.recommend) {
+    result.recommended.true += 1;
+  } else {
+    result.recommended.false += 1;
+  }
+  result.ratings[data.rating] += 1;
   await result.save();
 
   cb(null, 'hi')

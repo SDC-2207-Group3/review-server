@@ -8,6 +8,7 @@ const modelGetReviews = async(product_id, page, count, cb) => {
 
 const modelGetMeta = async(product_id, cb) => {
   // need to intercept and compute average
+  // have to reshape this anyways
   ReviewMeta.find({"product_id": product_id}, cb);
 }
 
@@ -25,20 +26,18 @@ const modelPost = async(data, cb) => {
   //   })
   // }
   // cb(null, 'done');
-  // ReviewMeta.findById(mongoose.Types.ObjectId(data.id), (err, result) => {
-  //   if (err) {
-  //     cb(err, null);
-  //   } else {
-  //     result.characteristics
-  //     result.save();
-  //     cb(null, result);
-  //   }
-  // })
-  const result = await Review.findById('632745a4f046a75ee4df8b72')
-  console.log(result);
-  const photo = result.photos.id('632745a4f046a75ee4df8b73')
-  console.log('photo', photo)
+
+  const result = await ReviewMeta.findOne({product_id: data.product_id});
+  for (let chars in data.characteristics) {
+    console.log('type of ', typeof chars, chars)
+    result.characteristics.id(chars).count += 1;
+    result.characteristics.id(chars).total += data.characteristics[chars];
+  }
+  await result.save();
+
   cb(null, 'hi')
+
+
 }
 
 const modelMarkHelpful = async() => {

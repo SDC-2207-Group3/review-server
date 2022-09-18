@@ -7,9 +7,26 @@ const modelGetReviews = async(product_id, page, count, cb) => {
 }
 
 const modelGetMeta = async(product_id, cb) => {
-  // need to intercept and compute average
-  // have to reshape this anyways
-  ReviewMeta.find({"product_id": product_id}, cb);
+  try {
+    const result = await ReviewMeta.findOne({"product_id": product_id});
+    let tempChars = {};
+    for (let element of result.characteristics) {
+      tempChars[element.name] = {
+        id: element._id.toString(),
+        value: element.total / element.count
+      }
+    }
+    // result keeps changing back, probably some default methods, declaring data and returning that instead
+    let data = {
+      product_id: result.product_id,
+      ratings: result.ratings,
+      recommended: result.recommended,
+      characteristics: tempChars,
+    }
+    cb(null, data);
+  } catch (error) {
+    cb(error, null)
+  }
 }
 
 const modelPost = async(data, cb) => {

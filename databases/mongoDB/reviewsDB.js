@@ -66,11 +66,11 @@ const ReviewMetaSchema = new Schema({
   })]
 })
 
-ReviewMetaSchema.method('toJSON', function () {
-  const { __v, _id, ...object } = this.toObject();
-  object.id = _id;
-  return object;
-});
+// ReviewMetaSchema.method('toJSON', function () {
+//   const { __v, _id, ...object } = this.toObject();
+//   object.id = _id;
+//   return object;
+// });
 
 //declare class of reviews using schema
 const Review = mongoose.model('Review', ReviewSchema);

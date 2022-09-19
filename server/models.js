@@ -41,7 +41,6 @@ const modelPost = async(data, cb) => {
 // but at the same time, we want to make sure that the review CAN be successfully created before updating the metadata, but the client should already have that kind of validation.
   try {
     await Review.create(data);
-    console.log('got here')
     const result = await ReviewMeta.findOne({product_id: data.product_id});
     for (let chars in data.characteristics) {
       result.characteristics.id(chars).count += 1;
@@ -53,7 +52,6 @@ const modelPost = async(data, cb) => {
       result.recommended.false += 1;
     }
     result.ratings[data.rating] += 1;
-    console.log('got here and updated metadata')
     await result.save();
     cb(null, true);
   } catch (error) {

@@ -17,12 +17,12 @@ const getReviews = (req, res) => {
 }
 
 const getReviewsMeta = (req, res) => {
-  let { product_id } = req.headers;
+  let { product_id } = req.query;
   modelGetMeta(parseInt(product_id), (err, result) => {
     if (err) {
       res.send(err);
     } else {
-      res.send(result);
+      res.send(JSON.stringify(result));
     }
   })
 }

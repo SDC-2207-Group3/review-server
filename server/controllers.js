@@ -1,14 +1,13 @@
 import { modelGetReviews, modelGetMeta, modelPost, modelMarkHelpful, modelReportReview } from './models.js'
 
 const getReviews = (req, res) => {
-  let { product_id, page, count} = req.headers;
-  modelGetReviews(parseInt(product_id), parseInt(page), parseInt(count), (err, result) => {
+  let { product_id, count} = req.query;
+  modelGetReviews(parseInt(product_id), parseInt(count), (err, result) => {
     if (err) {
       res.send(err);
     } else {
       let data = {
         product: product_id,
-        page: parseInt(page),
         count: result.length,
         results: result
       }
@@ -26,7 +25,6 @@ const getReviewsMeta = (req, res) => {
       res.send(result);
     }
   })
-
 }
 
 const postReview = (req, res) => {

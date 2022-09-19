@@ -1,9 +1,15 @@
 import { Review, ReviewMeta } from '../databases/mongoDB/reviewsDB.js';
 import mongoose from 'mongoose';
 
-const modelGetReviews = async(product_id, page, count, cb) => {
-  Review.find({"product_id": product_id, reported: false}, cb).
-  limit(count)
+const modelGetReviews = async(product_id, count, cb) => {
+  try {
+    let results = await Review.find({"product_id": product_id, reported: false}).
+    limit(count);
+    // need to transform photo _id to id
+    cb(null, results);
+  } catch (error) {
+    cb(error, null)
+  }
 }
 
 const modelGetMeta = async(product_id, cb) => {

@@ -56,7 +56,13 @@ const markHelpful = (req, res) => {
 }
 
 const reportReview = (req, res) => {
-
+  modelReportReview(req.params.review_id, (err, result) => {
+    if (err) {
+      res.sendStatus(404);
+    } else {
+      res.sendStatus(204);
+    }
+  })
 }
 
 export { getReviews, getReviewsMeta, postReview, markHelpful, reportReview }

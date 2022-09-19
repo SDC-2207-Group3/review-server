@@ -8,26 +8,19 @@ import cors from 'cors';
 const app = express();
 const port = 4000; //add to .env later
 
-
 app.use(express.json())
 
 // middlewares
 app.use(cors());
 app.use(logger)
-// app.use(bodyParser.json());
 app.use(morgan('dev'));
 
 // routes
 app.get('/reviews', getReviews)
 app.get('/reviews/meta', getReviewsMeta)
 app.post('/reviews', postReview)
-// check path syntax
 app.put('/reviews/:review_id/helpful', markHelpful)
 app.put('/reviews/:review_id/report', reportReview)
-
-
-
-
 
 app.listen(port, () => [
   console.log(`WW server listening on port http://localhost:${port}`)

@@ -8,7 +8,7 @@ import mongoose from 'mongoose';
 beforeAll(async () => {
 })
 
-afterEach(async () => {
+afterAll(async () => {
   await mongoose.disconnect();
   await app.close();
 });
@@ -20,19 +20,25 @@ describe('GET /reviews', () => {
     expect(response.statusCode).toBe(400);
   })
 
-  // it('should return with a 200 status code', () => {
-  //   const response = await agent.get('/reviews');
-  //   expect(response.statusCode).toBe(200);
-  //   // done();
-  // })
+  it('should return with a 200 status code', async () => {
+    const response = await request(app)
+    .get('/reviews')
+    .query({product_id : 1});
+    expect(response.statusCode).toBe(200);
+  })
 
+  it('should have the correct fields populated in the response body', async () => {
+    const response = await request(app)
+    .get('/reviews')
+    .query({product_id : 2});
+    expect(response.headers['content-type']).toEqual(expect.stringContaining("json"));
+    console.log(response.data);
+    // let { product_id, count, results } = response.data;
+    // expect(product_id).toBeDefined();
+    // expect(count).toBeDefined();
+    // expect(results).toBeDefined();
 
-
-  // it('should have the correct fields populated in the response body', () => {
-  //   expect(response.headers['content-type']).toEqual(expect.stringContaining("json"));
-  //   // expect(response.data.product_id).toBeDefined();
-
-  // })
+  })
 
   // should return error if no id is provided, or product not in database
 

@@ -2,7 +2,7 @@ import { Review, ReviewMeta } from '../databases/mongoDB/reviewsDB.js';
 import mongoose from 'mongoose';
 
 const modelGetReviews = async(product_id, page, count, cb) => {
-  Review.find({"product_id": product_id}, cb).
+  Review.find({"product_id": product_id, reported: false}, cb).
   limit(count)
 }
 
@@ -50,7 +50,7 @@ const modelPost = async(data, cb) => {
     console.log('got here and updated metadata')
     await result.save();
     cb(null, true);
-  } catch(error) {
+  } catch (error) {
     cb(error, null)
   }
 
@@ -67,8 +67,15 @@ const modelMarkHelpful = async(review_id, cb) => {
   }
 }
 
-const modelReportReview = async() => {
-
+const modelReportReview = async(review_id, cb) => {
+  try {
+    const review = await Review.findById(review_id);
+    review.reported = true;
+    await review.save();
+    cb(null, true);
+  } catch (error) {
+    cb(error, null)
+  }
 }
 
 export { modelGetReviews, modelGetMeta, modelPost, modelMarkHelpful, modelReportReview }

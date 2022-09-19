@@ -8,8 +8,7 @@
     "server-dev": "nodemon server/app.js",
     "mongo": "node databases/mongoDB/reviewsDB.js",
     "mongo-etl": "node --max-old-space-size=8192 databases/mongoDB/reviewETL.js",
-    "sandbox": "node sandbox.js",
-    "models": "node server/models.js"
+    "sandbox": "node sandbox.js"
   },
   "repository": {
     "type": "git",

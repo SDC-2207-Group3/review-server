@@ -6,7 +6,24 @@ const modelGetReviews = async(product_id, count, cb) => {
     let results = await Review.find({"product_id": product_id, reported: false}).
     limit(count);
     // need to transform photo _id to id
-    cb(null, results);
+    // not very elegant, but good for now
+    let transformedResults = [];
+    for (let result of results) {
+      let newResult = JSON.parse(JSON.stringify(result))
+      let newPhotos = [];
+      for (let photo of result.photos) {
+        photo.id = photo._id.toString();
+        newPhotos.push({
+          id: photo._id.toString(),
+          url: photo.url,
+        })
+      }
+      newResult.photos = newPhotos;
+      transformedResults.push(newResult);
+    }
+    transformedResults.push('dgjasldkjf')
+
+    cb(null, transformedResults);
   } catch (error) {
     cb(error, null)
   }

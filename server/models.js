@@ -1,9 +1,15 @@
 import { Review, ReviewMeta } from '../databases/mongoDB/reviewsDB.js';
 import mongoose from 'mongoose';
 
-const modelGetReviews = async(product_id, page, count, cb) => {
-  Review.find({"product_id": product_id, reported: false}, cb).
-  limit(count)
+const modelGetReviews = async(product_id, count, cb) => {
+  try {
+    let results = await Review.find({"product_id": product_id, reported: false}).
+    limit(count);
+    // need to transform photo _id to id
+    cb(null, results);
+  } catch (error) {
+    cb(error, null)
+  }
 }
 
 const modelGetMeta = async(product_id, cb) => {
@@ -35,7 +41,6 @@ const modelPost = async(data, cb) => {
 // but at the same time, we want to make sure that the review CAN be successfully created before updating the metadata, but the client should already have that kind of validation.
   try {
     await Review.create(data);
-    console.log('got here')
     const result = await ReviewMeta.findOne({product_id: data.product_id});
     for (let chars in data.characteristics) {
       result.characteristics.id(chars).count += 1;
@@ -47,7 +52,6 @@ const modelPost = async(data, cb) => {
       result.recommended.false += 1;
     }
     result.ratings[data.rating] += 1;
-    console.log('got here and updated metadata')
     await result.save();
     cb(null, true);
   } catch (error) {

@@ -4,8 +4,8 @@ import Promise from 'bluebird';
 import neatCsv from 'neat-csv';
 import { loadReviewData, loadMetaData, Review } from './reviewsDB.js'
 
-// let datafolder = 'oldData';
-let datafolder = 'sampleData';
+let datafolder = 'oldData';
+// let datafolder = 'sampleData';
 let reviews = {};
 let metaData = {};
 //temp object for characteristics_review csv to reference

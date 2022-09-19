@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "server-dev": "nodemon server/app.js",
     "mongo": "node databases/mongoDB/reviewsDB.js",
     "mongo-etl": "node --max-old-space-size=8192 databases/mongoDB/reviewETL.js",
-    "sandbox": "node sandbox.js"
+    "sandbox": "node sandbox.js",
+    "test": "jest --detectOpenHandles --forceExit"
   },
   "repository": {
     "type": "git",
@@ -34,6 +34,12 @@
   },
   "type": "module",
   "devDependencies": {
-    "nodemon": "^2.0.20"
+    "@babel/core": "^7.19.1",
+    "@babel/preset-env": "^7.19.1",
+    "babel-jest": "^29.0.3",
+    "jest": "^29.0.3",
+    "mocha": "^10.0.0",
+    "nodemon": "^2.0.20",
+    "supertest": "^6.2.4"
   }
 }

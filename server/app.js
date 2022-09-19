@@ -23,14 +23,7 @@ app.post('/reviews', postReview)
 app.put('/reviews/:review_id/helpful', markHelpful)
 app.put('/reviews/:review_id/report', reportReview)
 
-app.listen(port, () => [
+export default app.listen(port, () => [
   console.log(`WW server listening on port http://localhost:${port}`)
 ])
 
-
-// incoming
-// GET /reviews/
-// POST /reviews
-// GET /reviews/meta
-// PUT /reviews/:review_id/helpful
-// PUT /reviews/:review_id/report

@@ -1,10 +1,20 @@
 import { Review, ReviewMeta } from '../databases/mongoDB/reviewsDB.js';
 import mongoose from 'mongoose';
 
-const modelGetReviews = async(product_id, count, cb) => {
+const modelGetReviews = async(product_id, sort, count, cb) => {
+  let sortParam;
+  if (sort === 'helpful') {
+    sortParam = {helpfulness: -1};
+  } else if (sort === 'newest') {
+    sortParam = {date: -1};
+  } else {
+    sortParam = {helpfulness: -1, date: -1};
+  }
+
   try {
-    let results = await Review.find({product_id: product_id, reported: false}).
-    limit(count);
+      let results = await Review.find({product_id: product_id, reported: false}).
+      sort(sortParam).
+      limit(count);
     // need to transform photo _id to id
     // not very elegant, but good for now
     let transformedResults = [];

@@ -4,11 +4,13 @@ const getReviews = (req, res) => {
   let { product_id, count} = req.query;
   modelGetReviews(parseInt(product_id), parseInt(count), (err, result) => {
     if (err) {
-      res.send(err);
+      res.sendStatus(400);
     } else {
       let data = {
         product: product_id,
-        count: result.length,
+        // count: result.length,
+        // I don't like this but this is what the Atelier API had and what the client expects
+        count: parseInt(count),
         results: result
       }
       res.send(data);

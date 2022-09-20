@@ -21,8 +21,6 @@ const modelGetReviews = async(product_id, count, cb) => {
       newResult.photos = newPhotos;
       transformedResults.push(newResult);
     }
-    transformedResults.push('dgjasldkjf')
-
     cb(null, transformedResults);
   } catch (error) {
     cb(error, null)

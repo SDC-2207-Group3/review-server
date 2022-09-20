@@ -43,9 +43,10 @@ const ReviewSchema = new Schema({
   },
   date: {
     // should this be indexed for sorting?
-    type: Date,
+    type: String,
     // when this database was first transfered, not sure what other default value to give
-    default: 'Tue Sep 20 2022 10:49:44 GMT-0700 (Pacific Daylight Time)'
+    default: new Date(),
+    index: true
   },
   reported: {
     type: Boolean,

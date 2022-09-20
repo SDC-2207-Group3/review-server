@@ -73,7 +73,7 @@ fs.createReadStream(`/Users/thachdo/Documents/RFP2207/review-server/${datafolder
             recommend: data.recommend === 'true' ? true : false,
             response: data.response === 'null' ? null : data.response,
             body: data.body,
-            date: Date(data.date),
+            date: (data.date === 'null' || data.date === 'undefined' || data.date === undefined) ?  new Date('Tue Sep 20 2022 12:28:48 GMT-0700 (Pacific Daylight Time)') : new Date(parseInt(data.date)),
             reported: data.reported === 'true' ? true : false,
             reviewer_name: data.reviewer_name,
             helpfulness: parseInt(data.helpfulness),

@@ -30,13 +30,34 @@ describe('GET /reviews', () => {
   it('should have the correct fields populated in the response body', async () => {
     const response = await request(app)
     .get('/reviews')
-    .query({product_id : 2});
+    .query({product_id : 2})
     expect(response.headers['content-type']).toEqual(expect.stringContaining("json"));
-    console.log(response.data);
-    // let { product_id, count, results } = response.data;
-    // expect(product_id).toBeDefined();
-    // expect(count).toBeDefined();
-    // expect(results).toBeDefined();
+    let { product, count, results } = response.body;
+    expect(product).toBeDefined();
+    expect(count).toBeDefined();
+    expect(results).toBeDefined();
+    for (let result of results) {
+      let { review_id, rating, summary, recommend, response, body, date, reviewer_name, photos, reported } = result;
+      expect(typeof review_id).toBe('string');
+      expect(typeof rating).toBe('number');
+      expect(typeof summary).toBe('string');
+      expect(typeof recommend).toBe('boolean');
+      if (response) {
+        expect(typeof response).toBe('string');
+      }
+      expect(typeof body).toBe('string');
+      if (date) {
+        expect(typeof date).toBe('string');
+      }
+      expect(typeof reviewer_name).toBe('string');
+      expect(Array.isArray(photos)).toBe(true);
+      for (let photo of photos) {
+        console.log(photo)
+        expect(typeof photo.id).toBe('string');
+        expect(typeof photo.url).toBe('string');
+      }
+      expect(typeof reported).toBe('boolean');
+    }
 
   })
 

@@ -4,7 +4,10 @@ const { Schema } = mongoose;
 mongoose.connect('mongodb://localhost/reviews')
 
 const PhotoSchema = new Schema({
-  url: String
+  url: {
+    type: String,
+    required: true
+  }
 });
 // didn't work, might crash client with _id instead of id
 // PhotoSchema.method('toJSON', function () {
@@ -15,19 +18,45 @@ const PhotoSchema = new Schema({
 // });
 
 const ReviewSchema = new Schema({
-  product_id: Number,
-  rating: Number,
-  summary: String,
-  recommend: Boolean,
+  product_id: {
+    type: Number,
+    required: true,
+    index: true
+  },
+  rating: {
+    // should this be an index to filter by rating?
+    type: Number,
+    required: true
+  },
+  summary: {
+    type: String,
+    default: "User Review"
+  },
+  recommend: {
+    type: Boolean,
+    default: true
+  },
   response: String,
-  body: String,
-  date: Date,
+  body: {
+    type: String,
+    required: true
+  },
+  date: {
+    // should this be indexed for sorting?
+    type: Date,
+    // when this database was first transfered, not sure what other default value to give
+    default: 'Tue Sep 20 2022 10:49:44 GMT-0700 (Pacific Daylight Time)'
+  },
   reported: {
     type: Boolean,
     default: false
   },
-  reviewer_name: String,
+  reviewer_name: {
+    type: String,
+    default: 'Unknown user'
+  },
   helpfulness: {
+    // should this be index for sorting?
     type: Number,
     default: 0
   },

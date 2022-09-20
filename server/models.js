@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 
 const modelGetReviews = async(product_id, count, cb) => {
   try {
-    let results = await Review.find({"product_id": product_id, reported: false}).
+    let results = await Review.find({product_id: product_id, reported: false}).
     limit(count);
     // need to transform photo _id to id
     // not very elegant, but good for now

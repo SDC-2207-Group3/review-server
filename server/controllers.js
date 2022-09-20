@@ -22,9 +22,9 @@ const getReviewsMeta = (req, res) => {
   let { product_id } = req.query;
   modelGetMeta(parseInt(product_id), (err, result) => {
     if (err) {
-      res.send(err);
+      res.sendStatus(400);
     } else {
-      res.send(JSON.stringify(result));
+      res.send(result);
     }
   })
 }

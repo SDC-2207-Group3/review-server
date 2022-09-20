@@ -13,10 +13,11 @@ afterAll(async () => {
   await app.close();
 });
 
-describe('GET /reviews', () => {
+xdescribe('GET /reviews', () => {
 
   it('should require a product id in the get request', async () => {
-    const response = await request(app).get('/reviews');
+    const response = await request(app)
+    .get('/reviews');
     expect(response.statusCode).toBe(400);
   })
 
@@ -58,13 +59,29 @@ describe('GET /reviews', () => {
       }
       expect(typeof reported).toBe('boolean');
     }
+  })
+})
 
+describe('GET /reviews/meta,', () => {
+  it('should require a product id in the get request', async () => {
+    const response = await request(app)
+    .get('/reviews/meta');
+    expect(response.statusCode).toBe(400);
   })
 
-  // should return error if no id is provided, or product not in database
+  it('should return with a 200 status code', async () => {
+    const response = await request(app)
+    .get('/reviews/meta')
+    .query({product_id : 1});
+    expect(response.statusCode).toBe(200);
+  })
 
-  // return data with product field, count, results
-  // results should be an array
-  // each element of results should have review_id, rating, summary, recommend, response, body, date, reviewer_name, helpfulness, photos
-  // results.photos should be an array, which could be empty. Each element in photos aray should have an id and url
+  it('should return a result with correct fields', async () => {
+    const response = await request(app)
+    .get('/reviews/meta')
+    .query({product_id : 1});
+    let { product_id, ratings, recommended, characteristics } = response.body;
+    expect(product_id).toBe(1);
+    expect(Object.keys(ratings)).toEqual(expect.arrayContaining(['1', '2', '3', '4', '5']));
+  })
 })

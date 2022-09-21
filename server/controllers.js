@@ -2,7 +2,6 @@ import { modelGetReviews, modelGetMeta, modelPost, modelMarkHelpful, modelReport
 
 const getReviews = (req, res) => {
   let { product_id, sort, count} = req.query;
-  console.log('sorting by ', sort)
   modelGetReviews(parseInt(product_id), sort, parseInt(count), (err, result) => {
     if (err) {
       res.sendStatus(400);

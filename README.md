@@ -12,4 +12,7 @@ At this point, you've already set up your EC2 instance for a MongoDB server.
 ```
 sudo service mongod restart
 ```
-
+3. Start mongo shell
+```
+mongosh
+```

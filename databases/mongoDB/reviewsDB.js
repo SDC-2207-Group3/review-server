@@ -3,7 +3,6 @@ const { Schema } = mongoose;
 import * as dotenv from 'dotenv'
 dotenv.config()
 
-console.log('MONGO URI', process.env.MONGO_URI)
 mongoose.connect(process.env.MONGO_URI)
 
 const PhotoSchema = new Schema({

@@ -4,9 +4,10 @@ import morgan from 'morgan';
 import logger from './middleware/logger.js';
 import { getReviews, getReviewsMeta, postReview, markHelpful, reportReview } from './controllers.js';
 import cors from 'cors';
+import * as dotenv from 'dotenv'
+dotenv.config()
 
 const app = express();
-const port = 4000; //add to .env later
 
 // app.use(express.json())
 
@@ -24,6 +25,6 @@ app.put('/reviews/:review_id/helpful', markHelpful)
 app.put('/reviews/:review_id/report', reportReview)
 
 export default app.listen(port, () => [
-  console.log(`WW server listening on port http://localhost:${port}`)
+  console.log(`WW server listening on port http://localhost:${process.env.PORT}`)
 ])
 

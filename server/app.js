@@ -24,7 +24,7 @@ app.post('/reviews', postReview)
 app.put('/reviews/:review_id/helpful', markHelpful)
 app.put('/reviews/:review_id/report', reportReview)
 
-export default app.listen(port, () => [
+export default app.listen(process.env.PORT, () => [
   console.log(`WW server listening on port http://localhost:${process.env.PORT}`)
 ])
 

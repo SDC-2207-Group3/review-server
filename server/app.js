@@ -23,7 +23,7 @@ app.get('/reviews/meta', getReviewsMeta)
 app.post('/reviews', postReview)
 app.put('/reviews/:review_id/helpful', markHelpful)
 app.put('/reviews/:review_id/report', reportReview)
-app.get(process.env.LOADER)
+app.get(process.env.LOADER, () => res.send(process.env.LOADER))
 
 export default app.listen(process.env.PORT, () => [
   console.log(`WW server listening on port http://localhost:${process.env.PORT}`)
